@@ -83,7 +83,7 @@ public class EmployeeController {
      */
     @PostMapping
     @ApiOperation("新增员工")
-    public Result save(@RequestBody EmployeeDTO employeeDTO) {
+    public Result saveEmp(@RequestBody EmployeeDTO employeeDTO) {
         log.info("新增的员工{}", employeeDTO);
         employeeService.save(employeeDTO);
         return Result.success();
@@ -117,4 +117,28 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     *修改员工回显
+     * @param id
+     * @return
+     */
+    @ApiOperation("根据id查询员工")
+    @GetMapping("/{id}")
+    public Result<Employee> getById(@PathVariable Long id) {
+        log.info("查询员工的id：{}",id);
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    /**
+     * 修改员工信息
+     * @param employeeDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改员工信息")
+    public Result updateEmpById(@RequestBody EmployeeDTO employeeDTO) {
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
 }
