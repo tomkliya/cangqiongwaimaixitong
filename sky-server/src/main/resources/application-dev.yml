@@ -12,3 +12,8 @@ sky:
     access-key-id: LTAI5tAy5ThL8KRPuAPi54m6
     access-key-secret: V5U5EjZJL05q5oCOl7vO6PaFJtascS
     bucket-name: web-tlias1410
+    #redis数据库
+  redis:
+    port: 6379
+    database: 0
+    host: localhost

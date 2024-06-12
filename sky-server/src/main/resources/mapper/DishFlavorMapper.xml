@@ -9,8 +9,27 @@
         sky_take_out.dish_flavor
         (dish_id, name, value)
         values
-        <foreach collection="flavors" separator="," item="df" open="(" close=")">
-            #{df.dishId},#{df.name},#{df.value}
+        <foreach collection="flavors" separator="," item="df">
+            (#{df.dishId},#{df.name},#{df.value})
         </foreach>
     </insert>
+    <update id="update">
+        update sky_take_out.dish_flavor
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="value!=null">
+                value = #{value},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delete">
+        delete from sky_take_out.dish_flavor
+        where dish_id in
+        <foreach collection="DishIds" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
