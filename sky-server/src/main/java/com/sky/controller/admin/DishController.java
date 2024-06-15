@@ -2,8 +2,6 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
-import com.sky.entity.Dish;
-import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -11,11 +9,12 @@ import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -25,6 +24,8 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 新增菜品
@@ -33,6 +34,7 @@ public class DishController {
     @PostMapping
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品:{}", dishDTO);
+        cleanCache();
         dishService.dishWithFlavor(dishDTO);
        return Result.success();
     }
@@ -59,6 +61,7 @@ public class DishController {
     @ApiOperation("菜品的删除")
     public Result delete(@RequestParam List<Long> ids){
         log.info("删除的菜品ids:{}", ids);
+        cleanCache();
         dishService.delete(ids);
         return Result.success();
     }
@@ -72,6 +75,7 @@ public class DishController {
     @PutMapping
     public Result update(@RequestBody DishDTO dishDTO){
         log.info("修改菜品的数据:{}" ,dishDTO);
+        cleanCache();
         dishService.update(dishDTO);
         return Result.success();
     }
@@ -79,8 +83,26 @@ public class DishController {
     @GetMapping("/{id}")
     public Result<DishVO> getById(@PathVariable Long id){
         log.info("查询菜品的id{}",id);
+
         DishVO dishVO =  dishService.getById(id);
         return Result.success(dishVO);
+
     }
 
+    /**
+     * 清理缓存
+     */
+    private void cleanCache(){
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
+      //  log.info("清理缓存");
+    }
+    @PostMapping("/status/{status}")
+    public Result setStatus(@PathVariable Integer status,Long id){
+        log.info("修改菜品状态");
+
+        cleanCache();
+        dishService.updateStatus(status,id);
+        return Result.success();
+    }
 }
