@@ -59,4 +59,8 @@ public interface DishMapper {
      */
     @AutoFill(OperationType.UPDATE)
     Long update(Dish dish);
+
+
+    List<Dish> list(Dish dish);
+
 }

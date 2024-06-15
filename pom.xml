@@ -30,6 +30,7 @@
         <jjwt>0.9.1</jjwt>
         <jaxb-api>2.3.1</jaxb-api>
         <poi>3.16</poi>
+        <httpclient>4.5.13</httpclient>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -43,6 +44,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient}</version>
             </dependency>
 
             <dependency>
