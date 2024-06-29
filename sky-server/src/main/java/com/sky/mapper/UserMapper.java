@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -39,4 +40,8 @@ public interface UserMapper {
      */
     @Select("select * from sky_take_out.orders where status = #{pendingPayment} and order_time < #{now}")
     List<Orders> getByStatusAndOrderTime(Integer pendingPayment, LocalDateTime now);
+
+    Double getNewUserCount(Map map);
+
+    Double getUserCount(Map map);
 }

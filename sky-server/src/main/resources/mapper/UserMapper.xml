@@ -11,4 +11,16 @@
         values
             (#{openid},#{name},#{phone},#{sex},#{idNumber},#{avatar},#{createTime})
     </insert>
+    <select id="getNewUserCount" resultType="java.lang.Double">
+        select count(0) from sky_take_out.user
+        <where>
+            create_time &gt;= #{startTime} and create_time &lt;= #{endTime}
+        </where>
+    </select>
+    <select id="getUserCount" resultType="java.lang.Double">
+        select count(0) from sky_take_out.user
+        <where>
+            create_time &lt;= #{endTime}
+        </where>
+    </select>
 </mapper>

@@ -40,7 +40,8 @@ public class UserController {
         map.put(JwtClaimsConstant.USER_ID,user.getId());
         String userJwt = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), map);
 
-        UserLoginVO vo = UserLoginVO.builder().id(user.getId())
+        UserLoginVO vo = UserLoginVO.builder()
+                .id(user.getId())
                 .token(userJwt)
                 .openid(user.getOpenid())
                 .build();

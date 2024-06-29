@@ -2,17 +2,15 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
-import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -66,4 +64,11 @@ public interface DishMapper {
 
     @Update("update dish set status = #{status} where id = #{id} ")
     void updateStatus(Integer status,Long id);
+    /**
+     * 根据条件统计菜品数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
+

@@ -20,12 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.openmbean.OpenDataException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Transactional
 @Service
@@ -159,6 +157,20 @@ public class OrderServiceImpl implements OrderService {
 
 
         webSocketServer.sendToAllClient(jsonString);
+    }
+
+    @Override
+    public void reminder(Integer id) {
+        Orders order =  orderMapper.getById(id);
+        if (order == null) {
+            throw new OrderBusinessException("订单号为空");
+        }
+        Map map = new HashMap<>();
+        map.put("type",2);
+        map.put("orderId",id);
+        map.put("content","订单号:"+order.getNumber());
+
+        webSocketServer.sendToAllClient(JSONObject.toJSONString(map));
     }
 
 }

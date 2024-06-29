@@ -41,5 +41,52 @@
             </if>
         </set>
         where id = #{id}
-    </update>
+    <!-- 结束update标签 -->
+</update>
+
+    <!-- 根据map的key值分组，并计算每组的值 -->
+ <select id="sumByMap" resultType="java.lang.Double">
+        select sum(sky_take_out.orders.amount)
+                from sky_take_out.orders
+        <where>
+            <if test="status != null">
+                sky_take_out.orders.status = #{status}
+            </if>
+            <if test="beginTime != null and endTime != null">
+                and sky_take_out.orders.order_time between #{beginTime} and #{endTime}
+            </if>
+        </where>
+
+    </select>
+    <select id="getOrderTotalCount" resultType="java.lang.Integer">
+        select count(id) as totalCount from sky_take_out.orders
+
+        <where>
+            <if test="status != null">
+                sky_take_out.orders.status = #{status}
+            </if>
+            <if test="beginTime != null and endTime != null">
+                and sky_take_out.orders.order_time between #{beginTime} and #{endTime}
+            </if>
+
+        </where>
+
+    </select>
+    <select id="getSalesTopTen" resultType="com.sky.dto.GoodsSalesDTO">
+        select o.name,sum(o.number) as  number from
+        sky_take_out.orders od left join sky_take_out.order_detail o on
+            od.id = o.order_id
+        where od.status = 5
+        <if test="begin!=null">
+            and od.order_time &gt;= #{begin}
+        </if>
+        <if test="end!=null">
+            and od.order_time &lt;= #{end}
+        </if>
+        group by o.name
+        order by sum(o.number) desc
+        limit 0,10
+
+    </select>
+
 </mapper>
